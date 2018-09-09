@@ -3,6 +3,7 @@ var p1, p2;
 var ball;
 
 var timer = 0;
+var mod = 10;
 
 function setup() {
 	cnv = createCanvas(select('#pong').width, 30);
@@ -33,15 +34,15 @@ function keyPressed(){
 
 function draw() {
 	background('#e9ecef');
-	if (timer % 5 === 0)
+	if (timer % mod === 0)
 		p2.move2();
 
 	if (rotationX != null){
-	    var dir = 0;
-	    if (rotationX > 180) dir = -1;
-	    else dir = 1;
-	    p1.move(dir);
-    }
+		var dir = 0;
+		if (rotationX > 0) dir = 1;
+		else dir = -1;
+		p1.move(dir);
+	}
 
 	p1.intersects();
 	p2.intersects();
@@ -58,8 +59,8 @@ function Paddle() {
 	this.height = 10;
 
 	this.move = function(dir){
-		if (this.y + dir === 0) return;
-		else if (this.y + this.height + dir === cnv.height) return;
+		if (this.y + dir <= 0) return;
+		else if (this.y + this.height + dir >= cnv.height) return;
 		this.y += dir;
 	 };
 	this.move2 = function(){
@@ -75,8 +76,10 @@ function Paddle() {
 	};
 	this.intersects = function(){
 	  if (ball.x > this.x && ball.x < this.x + this.width){
-		  if (ball.y > this.y && ball.y < this.y + this.height)
+		  if (ball.y > this.y && ball.y < this.y + this.height) {
 			  ball.dir *= -1;
+			  ball.speed = random(0, 1);
+		  }
 	  }
 	};
 }
@@ -91,14 +94,14 @@ function Ball(){
 	this.move = function () {
 		this.x += this.dir;
 		this.y += this.speed;
-		if (this.y === 0 || this.y === cnv.height) {
+		if (this.y <= 0 || this.y >= cnv.height) {
 			this.speed *= -1;
 			this.y += 2 * this.speed;
 		}
-		if (this.x === 0 || this.x === cnv.width) {
-            this.x = cnv.width / 2;
-            this.dir *= -1;
-        }
+		if (this.x <= 0 || this.x >= cnv.width) {
+			this.x = cnv.width / 2;
+			this.dir *= -1;
+		}
 	};
 	this.display = function () {
 		ellipse(this.x, this.y, this.radius, this.radius);
