@@ -37,10 +37,15 @@ function draw() {
 	if (timer % mod === 0)
 		p2.move2();
 
-	if (rotationX != null){
+	if (deviceOrientation === "portrait"){
 		var dir = 0;
-		if (rotationX > 0) dir = 1;
-		else dir = -1;
+		if (rotationX > 10) dir = 1;
+		else if (rotationX < - 10) dir = -1;
+		p1.move(dir);
+	} else {
+		var dir = 0;
+		if (rotationY > 10) dir = 1;
+		else if (rotationY < -10) dir = -1;
 		p1.move(dir);
 	}
 
