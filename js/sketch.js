@@ -3,7 +3,8 @@ var p1, p2;
 var ball;
 
 var timer = 0;
-var mod = 10;
+var mod = 3;
+var leeway = 3;
 
 function setup() {
 	cnv = createCanvas(select('#pong').width, 30);
@@ -22,14 +23,8 @@ function centerCanvas(){
 
 function windowResized(){
 	centerCanvas();
-	cnv.width = select('#pong').width;
-}
-
-function keyPressed(){
-	if (key == "w")
-		p1.move(-1);
-	else if (key == "s")
-		p1.move(1);
+	resizeCanvas(select('#pong').width, height);
+	p2.x = cnv.width - 10 - p2.width;
 }
 
 function draw() {
@@ -37,15 +32,22 @@ function draw() {
 	if (timer % mod === 0)
 		p2.move2();
 
+	if (keyIsPressed) {
+		if (key === "w")
+			p1.move(-1);
+		else if (key === "s")
+			p1.move(1);
+	}
+
 	if (deviceOrientation === "portrait"){
 		var dir = 0;
-		if (rotationX > 10) dir = 1;
-		else if (rotationX < - 10) dir = -1;
+		if (rotationX > leeway) dir = 1;
+		else if (rotationX < leeway * -1) dir = -1;
 		p1.move(dir);
 	} else {
 		var dir = 0;
-		if (rotationY > 10) dir = 1;
-		else if (rotationY < -10) dir = -1;
+		if (rotationY > leeway) dir = 1;
+		else if (rotationY < -1* leeway) dir = -1;
 		p1.move(dir);
 	}
 
@@ -55,6 +57,7 @@ function draw() {
 	p2.display();
 	ball.move();
 	ball.display();
+	timer += 1;
 }
 
 function Paddle() {
