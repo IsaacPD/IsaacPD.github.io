@@ -28,7 +28,7 @@ function windowResized(){
 }
 
 function draw() {
-	background('#e9ecef');
+	background('#aab8a3');
 	if (timer % mod === 0)
 		p2.move2();
 
