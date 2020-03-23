@@ -5,6 +5,7 @@ body {
 .me {
     width: 20%;
     height: auto;
+    transform: rotate(90deg);
 }
 
 .top {
